@@ -5,6 +5,7 @@
   "author": "vale",
   "license": "MIT",
   "scripts": {
+    "start": "node index",
     "watch": "tsc -w",
     "dev": "nodemon index.js",
     "inspect": "nodemon --inspect index.js"
