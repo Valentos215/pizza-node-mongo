@@ -14,10 +14,12 @@ const userSchema = new Schema({
     type: String,
     required: false,
   },
-  ingredients: {
-    type: String,
-    required: true,
-  },
+  ingredients: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   baseCost: {
     type: Number,
     required: true,

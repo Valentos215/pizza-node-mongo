@@ -18,10 +18,12 @@ const positionSchema = new Schema({
     type: String,
     required: false,
   },
-  cost: {
-    type: Number,
-    required: true,
-  },
+  cost: [
+    {
+      type: Number,
+      required: true,
+    },
+  ],
   size: [
     {
       type: String,
