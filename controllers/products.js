@@ -1,4 +1,4 @@
-import STATUS_CODES from "../config/statusCodes";
+const STATUS_CODES = require("../config/statusCodes");
 const Product = require("../models/Product");
 const errorHandler = require("../utils/errorHandler");
 
