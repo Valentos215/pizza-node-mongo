@@ -6,20 +6,25 @@ const orderSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-  order: {
-    type: Number,
-    required: true,
-  },
   list: [
     {
-      name: { type: String },
+      id: { type: Number },
       quantity: { type: Number },
-      cost: { type: Number },
+      specification: { type: String },
     },
   ],
-  user: {
-    ref: "users",
-    type: Schema.Types.ObjectId,
+  customer: {
+    name: { type: String },
+    phone: { type: String },
+    email: { type: String },
+    adress: {
+      city: { type: String },
+      cerryOutStore: { type: String },
+      street: { type: String },
+      house: { type: String },
+      apartment: { type: String },
+      entrance: { type: String },
+    },
   },
 });
 

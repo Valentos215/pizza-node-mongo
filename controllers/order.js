@@ -1,45 +1,25 @@
 const Order = require("../models/Order");
 const errorHandler = require("../utils/errorHandler");
 
-module.exports.getAll = async (req, res) => {
-  const query = {
-    user: req.user.id,
-  };
-  if (req.qery.start /*date of start*/) {
-    query.date = {
-      $gte: req.query.start, // greater or equal
-    };
-  }
-  if (req.query.end) {
-    if (!req.query.date) {
-      query.date = {};
-    }
-    query.date["$lte"] = req.query.end; // less or equal
-  }
-  if (req.qery.order) {
-    query.order = +req.qery.order;
-  }
-  try {
-    const orders = await Order.find(query)
-      .sort({ date: -1 }) //-1 - sort by date in descending order
-      .skip(+req.query.offset) // offset
-      .limit(+req.query.limit); // limit
-
-    res.status(200).json(orders);
-  } catch (err) {
-    errorHandler(res, err);
-  }
-};
 module.exports.create = async (req, res) => {
   try {
-    const lastOrder = await Order.findOne({ user: req.user.id }).sort({
-      date: -1, //-1 - sort by date in descending order
-    });
-    const maxOrder = lastOrder ? lastOrder.order : 0;
+    const { name, phone, email, adress } = req.body.customer;
+    if (!name || !phone || !email || !adress) {
+      res.status(STATUS_CODES.BAD_REQUEST_400).json({
+        message: "name, phone, email or adress not specified",
+      });
+      return;
+    }
+    if (!req.body.list) {
+      res.status(STATUS_CODES.BAD_REQUEST_400).json({
+        message: "Shopping list is empty",
+      });
+      return;
+    }
+
     const order = await new Order({
       list: req.body.list,
-      user: req.user.id,
-      order: maxOrder + 1,
+      customer: { name, phone, email, adress },
     }).save();
     res.status(201).json(order);
   } catch (err) {
