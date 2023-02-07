@@ -4,6 +4,9 @@
   "main": "index.js",
   "author": "vale",
   "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "start": "node index",
     "watch": "tsc -w",
