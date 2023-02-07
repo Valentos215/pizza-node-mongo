@@ -4,7 +4,7 @@ const errorHandler = require("../utils/errorHandler");
 
 module.exports.getAll = async (req, res) => {
   try {
-    const pizzas = await Pizza.find({});
+    const pizzas = await Pizza.find();
     res.status(STATUS_CODES.OK_200).json(pizzas);
   } catch (err) {
     errorHandler(res, err);
