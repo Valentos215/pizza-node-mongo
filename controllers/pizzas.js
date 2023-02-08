@@ -11,6 +11,12 @@ module.exports.getAll = async (req, res) => {
   }
 };
 module.exports.create = async (req, res) => {
+  if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
+    res
+      .status(STATUS_CODES.UNATHORIZED_401)
+      .json({ message: "No access rights" });
+    return;
+  }
   const { imgUrl, title, description, ingredients, baseCost, popularity } =
     req.body;
   if (!imgUrl || !title || !ingredients || !baseCost || !popularity) {
@@ -36,6 +42,12 @@ module.exports.create = async (req, res) => {
   }
 };
 module.exports.update = async (req, res) => {
+  if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
+    res
+      .status(STATUS_CODES.UNATHORIZED_401)
+      .json({ message: "No access rights" });
+    return;
+  }
   if (!req.params.id) {
     res
       .status(STATUS_CODES.NOT_FOUND_404)
@@ -54,6 +66,12 @@ module.exports.update = async (req, res) => {
   }
 };
 module.exports.remove = async (req, res) => {
+  if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
+    res
+      .status(STATUS_CODES.UNATHORIZED_401)
+      .json({ message: "No access rights" });
+    return;
+  }
   if (!req.params.id) {
     res
       .status(STATUS_CODES.NOT_FOUND_404)
