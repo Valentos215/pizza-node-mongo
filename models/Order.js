@@ -10,7 +10,11 @@ const orderSchema = new Schema({
     {
       id: { type: Number },
       quantity: { type: Number },
-      specification: { type: String },
+      specification: {
+        size: { type: String },
+        crust: { type: String },
+        ingredients: [{ type: String }],
+      },
     },
   ],
   customer: {
@@ -19,7 +23,7 @@ const orderSchema = new Schema({
     email: { type: String },
     adress: {
       city: { type: String },
-      cerryOutStore: { type: String },
+      store: { type: String },
       street: { type: String },
       house: { type: String },
       apartment: { type: String },
