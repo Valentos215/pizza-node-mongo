@@ -1,5 +1,5 @@
-import { keysDev } from "./keys.dev";
 import { keysProd } from "./keys.prod";
+import { keysDev } from "./keys.dev";
 
 export type TKeys = { mongoURI: string | undefined };
 
