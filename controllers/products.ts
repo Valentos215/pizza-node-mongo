@@ -1,8 +1,25 @@
-const STATUS_CODES = require("../config/statusCodes");
-const Product = require("../models/Product");
-const errorHandler = require("../utils/errorHandler");
+import { errorHandler } from "../utils/errorHandler";
+import STATUS_CODES from "../config/statusCodes";
 
-module.exports.getAll = async (req, res) => {
+import { Response } from "express";
+import { RequestWithParams, RequestWithParamsAndBody } from "./../utils/types";
+import { Product, IProduct } from "../models/Product";
+
+interface IAdminReq {
+  adminKey: string;
+}
+
+interface IAdminProductReq extends IProduct, IAdminReq {}
+
+interface IReqParams {
+  id: string;
+  productType: string;
+}
+
+module.exports.getAll = async (
+  req: RequestWithParams<IReqParams>,
+  res: Response
+) => {
   if (!req.params.productType) {
     res
       .status(STATUS_CODES.NOT_FOUND_404)
@@ -12,11 +29,14 @@ module.exports.getAll = async (req, res) => {
   try {
     const products = await Product.find({ type: req.params.productType });
     res.status(STATUS_CODES.OK_200).json(products);
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.create = async (req, res) => {
+module.exports.create = async (
+  req: RequestWithParamsAndBody<IReqParams, IAdminProductReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -47,11 +67,14 @@ module.exports.create = async (req, res) => {
   try {
     await product.save();
     res.status(STATUS_CODES.CREATED_201).json(product);
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.update = async (req, res) => {
+module.exports.update = async (
+  req: RequestWithParamsAndBody<IReqParams, IAdminProductReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -71,11 +94,14 @@ module.exports.update = async (req, res) => {
       { new: true }
     );
     res.status(200).json(product);
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.remove = async (req, res) => {
+module.exports.remove = async (
+  req: RequestWithParamsAndBody<IReqParams, IAdminReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -93,7 +119,7 @@ module.exports.remove = async (req, res) => {
     res
       .status(STATUS_CODES.OK_200)
       .json({ message: "Product has been removed" });
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
