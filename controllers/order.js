@@ -1,11 +1,7 @@
-import { IOrder } from "./../models/Order";
-import { RequestWithBody } from "./../utils/types";
-import { Order } from "../models/Order";
-import { errorHandler } from "../utils/errorHandler";
-import STATUS_CODES from "../config/statusCodes";
-import { Response } from "express";
+const Order = require("../models/Order");
+const errorHandler = require("../utils/errorHandler");
 
-module.exports.create = async (req: RequestWithBody<IOrder>, res: Response) => {
+module.exports.create = async (req, res) => {
   try {
     const { name, phone, email, adress } = req.body.customer;
     if (!name || !phone || !email || !adress) {
@@ -26,7 +22,7 @@ module.exports.create = async (req: RequestWithBody<IOrder>, res: Response) => {
       customer: { name, phone, email, adress },
     }).save();
     res.status(201).json(order);
-  } catch (err: any) {
+  } catch (err) {
     errorHandler(res, err);
   }
 };
