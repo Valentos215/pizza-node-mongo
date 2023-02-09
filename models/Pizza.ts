@@ -1,7 +1,15 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { Schema, model } from "mongoose";
 
-const userSchema = new Schema({
+export interface IPizza {
+  imgUrl: string;
+  title: string;
+  description: string;
+  ingredients: string[];
+  baseCost: number;
+  popularity: number;
+}
+
+const pizzaSchema = new Schema({
   imgUrl: {
     type: String,
     required: true,
@@ -30,4 +38,4 @@ const userSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("pizzas", userSchema);
+export const Pizza = model<IPizza>("pizzas", pizzaSchema);

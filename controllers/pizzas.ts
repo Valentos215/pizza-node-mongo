@@ -1,16 +1,33 @@
-const STATUS_CODES = require("../config/statusCodes");
-const Pizza = require("../models/Pizza");
-const errorHandler = require("../utils/errorHandler");
+import { errorHandler } from "../utils/errorHandler";
+import STATUS_CODES from "../config/statusCodes";
 
-module.exports.getAll = async (req, res) => {
+import { Request, Response } from "express";
+import { RequestWithBody, RequestWithParamsAndBody } from "./../utils/types";
+import { Pizza, IPizza } from "../models/Pizza";
+
+interface IAdminReq {
+  adminKey: string;
+}
+
+interface IAdminPizzaReq extends IPizza, IAdminReq {}
+
+interface IReqParams {
+  id: string;
+}
+
+module.exports.getAll = async (req: Request, res: Response) => {
   try {
-    const pizzas = await Pizza.find();
+    const pizzas: IPizza[] = await Pizza.find();
     res.status(STATUS_CODES.OK_200).json(pizzas);
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.create = async (req, res) => {
+
+module.exports.create = async (
+  req: RequestWithBody<IAdminPizzaReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -26,7 +43,7 @@ module.exports.create = async (req, res) => {
     });
     return;
   }
-  const product = new Product({
+  const pizza = new Pizza({
     imgUrl,
     title,
     description,
@@ -35,13 +52,17 @@ module.exports.create = async (req, res) => {
     popularity,
   });
   try {
-    await product.save();
-    res.status(STATUS_CODES.CREATED_201).json(product);
-  } catch (err) {
+    await pizza.save();
+    res.status(STATUS_CODES.CREATED_201).json(pizza);
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.update = async (req, res) => {
+
+module.exports.update = async (
+  req: RequestWithParamsAndBody<IReqParams, IAdminPizzaReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -61,11 +82,15 @@ module.exports.update = async (req, res) => {
       { new: true }
     );
     res.status(200).json(pizza);
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
-module.exports.remove = async (req, res) => {
+
+module.exports.remove = async (
+  req: RequestWithParamsAndBody<IReqParams, IAdminReq>,
+  res: Response
+) => {
   if (!req.body.adminKey || req.body.adminKey !== process.env.ADMIN_KEY) {
     res
       .status(STATUS_CODES.UNATHORIZED_401)
@@ -81,7 +106,7 @@ module.exports.remove = async (req, res) => {
   try {
     await Pizza.remove({ _id: req.params.id });
     res.status(STATUS_CODES.OK_200).json({ message: "Pizza has been removed" });
-  } catch (err) {
+  } catch (err: any) {
     errorHandler(res, err);
   }
 };
