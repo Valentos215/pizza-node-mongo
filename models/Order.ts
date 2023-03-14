@@ -4,7 +4,7 @@ export interface IOrder {
   date: Date;
   list: [
     {
-      id: number;
+      id: string;
       quantity: number;
       specification: {
         size: string;
@@ -19,11 +19,11 @@ export interface IOrder {
     email: string;
     adress: {
       city: string;
-      store: string;
-      street: string;
-      house: number;
-      apartment: number;
-      entrance: number;
+      store?: string;
+      street?: string;
+      house?: number;
+      apartment?: number;
+      entrance?: number;
     };
   };
 }
@@ -35,26 +35,26 @@ const orderSchema = new Schema({
   },
   list: [
     {
-      id: { type: Number },
-      quantity: { type: Number },
+      id: { type: String, required: true },
+      quantity: { type: Number, required: true },
       specification: {
-        size: { type: String },
-        crust: { type: String },
-        ingredients: [{ type: String }],
+        size: { type: String, required: true },
+        crust: { type: String, required: false },
+        ingredients: [{ type: String, required: false }],
       },
     },
   ],
   customer: {
-    name: { type: String },
-    phone: { type: String },
-    email: { type: String },
+    name: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true },
     adress: {
-      city: { type: String },
-      store: { type: String },
-      street: { type: String },
-      house: { type: Number },
-      apartment: { type: Number },
-      entrance: { type: Number },
+      city: { type: String, required: true },
+      store: { type: String, required: false },
+      street: { type: String, required: false },
+      house: { type: Number, required: false },
+      apartment: { type: Number, required: false },
+      entrance: { type: Number, required: false },
     },
   },
 });
